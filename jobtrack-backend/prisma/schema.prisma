@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model CandidateProfile {
+  id           String        @id @default(uuid())
+  firstName    String
+  lastName     String
+  email        String        @unique
+  summary      String?
+  evidence     Json?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  roleProfiles RoleProfile[]
+}
+
+model RoleProfile {
+  id                   String           @id @default(uuid())
+  candidateId          String
+  targetRoleTitle      String
+  seniority            String?
+  positioningStatement String?
+  skills               Json?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  applications         Application[]
+  candidate            CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+}
+
+model Company {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  domain    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  contacts  Contact[]
+  jobs      Job[]
+}
+
+model Job {
+  id           String        @id @default(uuid())
+  companyId    String
+  title        String
+  url          String?
+  source       String?
+  description  String?
+  requirements Json?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  applications Application[]
+  company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Application {
+  id                   String        @id @default(uuid())
+  jobId                String
+  roleProfileId        String?
+  fitScore             Int?
+  fitAnalysis          Json?
+  status               String        @default("SAVED")
+  appliedAt            DateTime?
+  expectedResponseDate DateTime?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  job                  Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  roleProfile          RoleProfile?  @relation(fields: [roleProfileId], references: [id])
+  interactions         Interaction[]
+}
+
+model Contact {
+  id           String        @id @default(uuid())
+  companyId    String
+  firstName    String
+  lastName     String
+  title        String?
+  email        String?
+  linkedin     String?
+  type         String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  interactions Interaction[]
+}
+
+model Interaction {
+  id            String       @id @default(uuid())
+  contactId     String
+  applicationId String?
+  type          String
+  content       String?
+  direction     String
+  timestamp     DateTime     @default(now())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  application   Application? @relation(fields: [applicationId], references: [id])
+  contact       Contact      @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
