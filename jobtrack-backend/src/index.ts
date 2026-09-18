@@ -8,10 +8,15 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
+import jobsRouter from './routes/jobs';
+
 // Basic health check
 app.get('/healthz', (req: Request, res: Response) => {
   res.json({ status: 'ok' });
 });
+
+// API Routes
+app.use('/api/jobs', jobsRouter);
 
 // Global Error Handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
