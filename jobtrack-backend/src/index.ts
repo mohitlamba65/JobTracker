@@ -9,6 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 import jobsRouter from './routes/jobs';
+import rolesRouter from './routes/roles';
 
 // Basic health check
 app.get('/healthz', (req: Request, res: Response) => {
@@ -17,6 +18,7 @@ app.get('/healthz', (req: Request, res: Response) => {
 
 // API Routes
 app.use('/api/jobs', jobsRouter);
+app.use('/api/roles', rolesRouter);
 
 // Global Error Handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

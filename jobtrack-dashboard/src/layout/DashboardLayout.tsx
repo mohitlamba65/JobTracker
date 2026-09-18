@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Briefcase, LayoutDashboard, Users, User, Bell } from 'lucide-react';
+import { Briefcase, LayoutDashboard, Users, User, Bell, Target, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function DashboardLayout() {
@@ -21,6 +21,12 @@ export default function DashboardLayout() {
           <NavItem to="/opportunities" icon={<LayoutDashboard size={20} />} label="Opportunities" />
           <NavItem to="/applications" icon={<Briefcase size={20} />} label="Applications" />
           <NavItem to="/contacts" icon={<Users size={20} />} label="Contacts" />
+          
+          <div className="pt-4 pb-2">
+            <p className="px-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">Preparation</p>
+          </div>
+          <NavItem to="/roles" icon={<Target size={20} />} label="Role Profiles" />
+          <NavItem to="/resume" icon={<FileText size={20} />} label="Resume Studio" />
         </nav>
 
         <div className="p-4 border-t border-white/10">
