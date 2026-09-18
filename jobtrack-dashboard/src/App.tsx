@@ -6,6 +6,7 @@ import Contacts from './pages/Contacts';
 import CandidateProfile from './pages/CandidateProfile';
 import RoleProfiles from './pages/RoleProfiles';
 import ResumeStudio from './pages/ResumeStudio';
+import Analytics from './pages/Analytics';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="opportunities" element={<Opportunities />} />
           <Route path="applications" element={<Applications />} />
           <Route path="contacts" element={<Contacts />} />
+          <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<CandidateProfile />} />
           <Route path="roles" element={<RoleProfiles />} />
           <Route path="resume" element={<ResumeStudio />} />

@@ -232,3 +232,93 @@ export async function generateOutreachDraft(
   if (!res.ok) throw new Error('Failed to generate draft');
   return await res.json();
 }
+
+export interface FunnelStageItem {
+  stage: string;
+  label: string;
+  count: number;
+  conversionFromPrevious: number;
+  dropoffRate: number;
+  averageDaysInStage: number;
+}
+
+export interface RolePerformanceItem {
+  roleTitle: string;
+  applications: number;
+  interviews: number;
+  offers: number;
+  conversionRate: number;
+  averageFitScore: number;
+}
+
+export interface FitTierItem {
+  tier: string;
+  rangeLabel: string;
+  applications: number;
+  interviews: number;
+  interviewRate: number;
+}
+
+export interface FunnelAnalyticsData {
+  stages: FunnelStageItem[];
+  overallConversionRate: number;
+  totalSaved: number;
+  totalApplied: number;
+  totalInterviews: number;
+  totalOffers: number;
+  totalOutreaches: number;
+  outreachResponseRate: number;
+  averageCycleTimeDays: number;
+  roleBreakdown: RolePerformanceItem[];
+  fitScoreCorrelation: FitTierItem[];
+}
+
+export interface BottleneckItem {
+  id: string;
+  stage: string;
+  severity: 'CRITICAL' | 'WARNING' | 'HEALTHY';
+  title: string;
+  description: string;
+  metric: string;
+  industryBenchmark: string;
+  recommendedAction: string;
+}
+
+export interface StrategyDiagnosisData {
+  overallHealth: 'EXCELLENT' | 'SOLID' | 'NEEDS_ADJUSTMENT' | 'AT_RISK';
+  summaryHeadline: string;
+  executiveSummary: string;
+  bottlenecks: BottleneckItem[];
+  highFitLeverageMultiplier: number;
+  tacticalRecommendations: string[];
+}
+
+export interface JobAlertItem {
+  id: string;
+  type: string;
+  priority: 'URGENT' | 'HIGH' | 'MEDIUM';
+  title: string;
+  message: string;
+  timestamp: string;
+  actionUrl: string;
+  actionLabel: string;
+}
+
+export async function fetchFunnelAnalytics(): Promise<FunnelAnalyticsData> {
+  const res = await fetch(`${API_BASE_URL}/analytics/funnel`);
+  if (!res.ok) throw new Error('Failed to fetch funnel analytics');
+  return await res.json();
+}
+
+export async function fetchStrategyDiagnosis(): Promise<StrategyDiagnosisData> {
+  const res = await fetch(`${API_BASE_URL}/analytics/diagnosis`);
+  if (!res.ok) throw new Error('Failed to fetch strategy diagnosis');
+  return await res.json();
+}
+
+export async function fetchAlerts(): Promise<JobAlertItem[]> {
+  const res = await fetch(`${API_BASE_URL}/analytics/alerts`);
+  if (!res.ok) throw new Error('Failed to fetch alerts');
+  return await res.json();
+}
+

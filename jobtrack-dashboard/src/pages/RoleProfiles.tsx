@@ -1,4 +1,3 @@
-import React from 'react';
 import { Target, Plus } from 'lucide-react';
 
 export default function RoleProfiles() {

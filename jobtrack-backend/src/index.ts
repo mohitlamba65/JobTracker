@@ -9,6 +9,7 @@ app.use(express.json());
 import jobsRouter from './routes/jobs';
 import rolesRouter from './routes/roles';
 import contactsRouter from './routes/contacts';
+import analyticsRouter from './routes/analytics';
 
 // Basic health check
 app.get('/healthz', (req: Request, res: Response) => {
@@ -19,6 +20,7 @@ app.get('/healthz', (req: Request, res: Response) => {
 app.use('/api/jobs', jobsRouter);
 app.use('/api/roles', rolesRouter);
 app.use('/api/contacts', contactsRouter);
+app.use('/api/analytics', analyticsRouter);
 
 // Global Error Handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

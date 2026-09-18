@@ -1,5 +1,4 @@
-import React from 'react';
-import { FileText, Wand2, CheckCircle2 } from 'lucide-react';
+import { Wand2, CheckCircle2 } from 'lucide-react';
 
 export default function ResumeStudio() {
   return (

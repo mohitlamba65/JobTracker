@@ -1,4 +1,3 @@
-import React from 'react';
 import { Save, UserCircle } from 'lucide-react';
 
 export default function CandidateProfile() {
