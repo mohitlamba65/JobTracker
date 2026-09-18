@@ -1,9 +1,8 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
+import { prisma } from '../lib/prisma';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const RoleProfileSchema = z.object({
   candidateId: z.string().uuid(),
@@ -22,9 +21,9 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
       data: {
         candidateId: data.candidateId,
         targetRoleTitle: data.targetRoleTitle,
-        seniority: data.seniority,
-        positioningStatement: data.positioningStatement,
-        skills: data.skills,
+        seniority: data.seniority || null,
+        positioningStatement: data.positioningStatement || null,
+        skills: (data.skills ?? []) as any,
       },
     });
 
@@ -42,7 +41,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
 // Get all role profiles for a candidate
 router.get('/candidate/:candidateId', async (req: Request, res: Response) => {
   try {
-    const { candidateId } = req.params;
+    const candidateId = String(req.params['candidateId']);
     const roleProfiles = await prisma.roleProfile.findMany({
       where: { candidateId },
       orderBy: { createdAt: 'desc' },

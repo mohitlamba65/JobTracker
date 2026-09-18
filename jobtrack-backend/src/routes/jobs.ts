@@ -1,11 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { JDAnalyzer } from '../services/JDAnalyzer';
 import { FitEngine, CandidateEvidence } from '../services/FitEngine';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const CreateJobSchema = z.object({
   companyName: z.string().min(1),
@@ -61,10 +60,10 @@ router.post('/', async (req: Request, res: Response) => {
       data: {
         companyId: company.id,
         title: data.title,
-        url: data.url,
-        source: data.source,
-        description: data.description,
-        requirements: requirements as any, // Stored as JSONB
+        url: data.url || null,
+        source: data.source || null,
+        description: data.description || null,
+        requirements: (requirements ?? {}) as any,
       },
     });
 
@@ -72,16 +71,17 @@ router.post('/', async (req: Request, res: Response) => {
     const application = await prisma.application.create({
       data: {
         jobId: job.id,
-        status: 'SAVED', // Epic 4: Opportunity Inbox default state
+        status: 'SAVED',
         fitScore,
-        fitAnalysis: fitAnalysis as any,
+        fitAnalysis: (fitAnalysis ?? {}) as any,
       }
     });
 
     res.status(201).json({ job, application, fitAnalysis });
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: error.issues || error.message });
+      return;
     }
     console.error('Failed to ingest job:', error);
     res.status(500).json({ error: 'Internal Server Error' });
